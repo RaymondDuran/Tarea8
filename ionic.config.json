@@ -1,0 +1,7 @@
+{
+  "name": "Tarea 8",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
