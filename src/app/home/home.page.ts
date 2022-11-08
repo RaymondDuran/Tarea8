@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PhotoService } from '../services/photo.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { RecordingData, VoiceRecorder } from 'capacitor-voice-recorder';
-
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +13,7 @@ export class HomePage implements OnInit {
   recording = false;
   storedFileNames = [];
 
-  constructor(public photoService: PhotoService) { }
+  constructor(private storage: Storage, public photoService: PhotoService) { }
 
   // CUESTION MODAL
   isModalOpen = false;
@@ -26,9 +26,46 @@ export class HomePage implements OnInit {
     this.photoService.addNewToGallery();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadFiles();
     VoiceRecorder.requestAudioRecordingPermission();
+
+    await this.storage.create();
+
+    this.cargarVivencias();
+
+
+
+  }
+
+  // inputs modal
+  public titulo: string = "";
+  public descripcion: string = "";
+  public fecha: string = "";
+  vivencias = [];
+
+  // Storage
+  async cargarVivencias(){
+    this.vivencias = [];
+    this.storage.forEach((key, value, index) => {
+      this.vivencias.unshift(key);
+    });
+  }
+
+  async addVivencia(){
+    this.fecha = "" + new Date().getDate()+ "-" + new Date().getMonth() + "-" + new Date().getFullYear();
+
+
+    await this.storage.set(this.titulo, {
+      'titulo': this.titulo,
+      'descripcion': this.descripcion,
+      'fecha': this.fecha
+    });
+    this.cargarVivencias();
+    this.setOpen(false);
+
+    this.titulo = "";
+    this.descripcion = "";
   }
 
   async loadFiles() {
@@ -67,6 +104,18 @@ export class HomePage implements OnInit {
     })
   }
 
+  async playFile(fileName){
+    const audioFile = await Filesystem.readFile({
+      path:fileName,
+      directory: Directory.Data
+    });
+    const base64Sound = audioFile.data;
+
+    const audioRef = new Audio(`data:audio/aac;base64,${base64Sound}`)
+    audioRef.oncanplaythrough = () => audioRef.play();
+    audioRef.load();
+  }
+
+
+  //Raymond Del Carmen
 }
-
-

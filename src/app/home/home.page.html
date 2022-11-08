@@ -13,6 +13,14 @@
     </ion-toolbar>
   </ion-header>
 
+
+  <ion-list>
+    <ion-item class="item-text-wrap" *ngFor="let viv of vivencias">
+      <h3>{{viv.titulo}}</h3>
+
+    </ion-item>
+  </ion-list>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="setOpen(true)">
       <ion-icon name="add"></ion-icon>
@@ -23,7 +31,7 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Modal del diablo</ion-title>
+          <ion-title>Modal</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="setOpen(false)">Cerrar</ion-button>
           </ion-buttons>
@@ -32,21 +40,34 @@
       <ion-content class="ion-padding">
         <ion-item>
           <ion-label position="floating">Titulo</ion-label>
-          <ion-input placeholder="Enter text"></ion-input>
+          <ion-input placeholder="Enter text"[(ngModel)]="titulo"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Descripcion</ion-label>
-          <ion-input placeholder="Enter text"></ion-input>
+          <ion-input placeholder="Enter text"[(ngModel)]="descripcion"></ion-input>
         </ion-item>
         <ion-fab-button (click)="addPhotoToGallery()">
           <ion-icon name="camera"></ion-icon>
         </ion-fab-button>
-        <ion-button fill="clear">Añadir</ion-button>
+
+        <ion-item>
+          <ion-button (click)="startRecording()"  expand="full">Start</ion-button>
+          <ion-button (click)="stopRecording()"  expand="full" color="danger">Stop</ion-button>
+        </ion-item>
+        
+        <ion-list>
+          <ion-item button *ngFor="let f of storedFileNames" (click)="playFile(f)">
+            {{ f }}
+          </ion-item>
+
+        </ion-list>
+
+        <ion-button fill="clear" (click)="addVivencia()">Añadir</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
 
-
+  
 
 
 </ion-content>
