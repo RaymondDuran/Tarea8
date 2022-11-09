@@ -9,22 +9,30 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Diario</ion-title>
+      <ion-title size="large">Diario<ion-icon name="wine"></ion-icon></ion-title>
     </ion-toolbar>
   </ion-header>
 
 
   <ion-list>
-    <ion-item class="item-text-wrap" *ngFor="let viv of vivencias">
+    <ion-item class="item-text-wrap" *ngFor="let viv of vivencias" [routerLink]="['/vivencias/' + viv.titulo]">
       <h3>{{viv.titulo}}</h3>
 
     </ion-item>
   </ion-list>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button (click)="setOpen(true)">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
+    <ion-fab-button>
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>           
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="setOpen(true)">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="borrarVivencias()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 
   <ion-modal [isOpen]="isModalOpen">
@@ -55,12 +63,12 @@
           <ion-button (click)="stopRecording()"  expand="full" color="danger">Stop</ion-button>
         </ion-item>
         
-        <ion-list>
+          <!--<ion-list>
           <ion-item button *ngFor="let f of storedFileNames" (click)="playFile(f)">
             {{ f }}
           </ion-item>
 
-        </ion-list>
+        </ion-list>-->
 
         <ion-button fill="clear" (click)="addVivencia()">Añadir</ion-button>
       </ion-content>

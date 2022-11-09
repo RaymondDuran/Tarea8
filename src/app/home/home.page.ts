@@ -34,8 +34,6 @@ export class HomePage implements OnInit {
 
     this.cargarVivencias();
 
-
-
   }
 
   // inputs modal
@@ -53,13 +51,18 @@ export class HomePage implements OnInit {
   }
 
   async addVivencia(){
-    this.fecha = "" + new Date().getDate()+ "-" + new Date().getMonth() + "-" + new Date().getFullYear();
+    this.fecha = "" + new Date().getDate()+ "-" + (new Date().getMonth() + 1) + "-" + new Date().getFullYear();
+    await this.loadFiles();
+    const fotoFile = this.storedFileNames[this.storedFileNames.length - 1];
+    const fotoPath = fotoFile.uri;
 
+    
 
     await this.storage.set(this.titulo, {
       'titulo': this.titulo,
       'descripcion': this.descripcion,
-      'fecha': this.fecha
+      'fecha': this.fecha,
+      'foto': fotoPath
     });
     this.cargarVivencias();
     this.setOpen(false);
@@ -73,10 +76,17 @@ export class HomePage implements OnInit {
       path: '',
       directory: Directory.Data
     }).then(result => {
-      console.log(result);
+      console.log(result.files);
       this.storedFileNames = result.files;
     })
   }
+
+  async borrarVivencias(){
+    await this.storage.clear();
+    this.cargarVivencias();
+  }
+
+  // Audio
 
   startRecording() {
     if (this.recording) {
@@ -117,5 +127,5 @@ export class HomePage implements OnInit {
   }
 
 
-  //Raymond Del Carmen
+
 }
